@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="description" content="Echo Cash Demo — illustrative loan products for Zambia. Not a real lender.">
+  <title>Echo Cash Demo · Zambia (ZMW)</title>
+  <style>
+    /* RESET & GLOBAL */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    }
+
+    body {
+      background: #f4f7fc;
+      color: #1e293b;
+      line-height: 1.5;
+      padding: 0 16px 32px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* MOBILE-FIRST (Android friendly) */
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* DEMO BANNER — prominent & fixed */
+    .demo-banner {
+      background: #b91c1c;
+      color: white;
+      text-align: center;
+      padding: 10px 12px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 0.3px;
+      border-radius: 0 0 16px 16px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      word-break: break-word;
+    }
+
+    .demo-banner span {
+      background: rgba(255,255,255,0.2);
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      margin-left: 6px;
+      white-space: nowrap;
+    }
+
+    /* HEADER */
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .logo {
+      font-size: 1.9rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #0f3b5e;
+      line-height: 1.2;
+    }
+
+    .logo small {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #3b6e9c;
+      background: #e2eaf3;
+      padding: 2px 10px;
+      border-radius: 30px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    .country-badge {
+      background: #e6f0fa;
+      border-radius: 40px;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #0f3b5e;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid #b9d1e8;
+    }
+
+    /* CARD STYLES */
+    .card {
+      background: white;
+      border-radius: 24px;
+      padding: 20px 18px;
+      margin-bottom: 18px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+      border: 1px solid #e9f0f7;
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #0c2d48;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h2 i {
+      font-style: normal;
+      background: #d0e2f2;
+      padding: 4px 10px;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #0c2d48;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #1e3a5f;
+    }
+
+    /* FORM ELEMENTS (Android friendly) */
+    label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #1e3a5f;
+    }
+
+    input, select, .input-phone-group {
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 1rem;
+      background: #f9fcff;
+      border: 1.5px solid #cdddec;
+      border-radius: 18px;
+      outline: none;
+      transition: border 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    input:focus, select:focus {
+      border-color: #0f3b5e;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(15,59,94,0.1);
+    }
+
+    .input-phone-group {
+      display: flex;
+      padding: 0;
+      background: #f9fcff;
+      border: 1.5px solid #cdddec;
+      border-radius: 18px;
+      overflow: hidden;
+      align-items: center;
+    }
+
+    .input-phone-group select {
+      width: 110px;
+      border: none;
+      background: #e3eef9;
+      font-weight: 600;
+      padding: 14px 10px;
+      border-radius: 0;
+      color: #0f3b5e;
+      font-size: 0.95rem;
+    }
+
+    .input-phone-group input {
+      border: none;
+      border-radius: 0;
+      flex: 1;
+      background: transparent;
+      padding-left: 12px;
+    }
+
+    .input-phone-group input:focus {
+      background: white;
+      box-shadow: none;
+    }
+
+    .row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .row > * {
+      flex: 1 1 140px;
+    }
+
+    /* LOAN PRODUCT CARDS */
+    .loan-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .loan-item {
+      background: #f6faff;
+      border-radius: 18px;
+      padding: 16px;
+      border: 1px solid #d8e6f2;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .loan-amount {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #0c2d48;
+      letter-spacing: -0.5px;
+    }
+
+    .loan-amount small {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #3b6e9c;
+      margin-left: 4px;
+    }
+
+    .loan-detail {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      margin-top: 8px;
+      color: #2f4f6f;
+    }
+
+    .badge-term {
+      background: #d9eaf9;
+      padding: 4px 12px;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 0.8rem;
+      align-self: flex-start;
+      margin-top: 10px;
+      color: #0f3b5e;
+    }
+
+    /* CALCULATOR CARD */
+    .calc-result {
+      background: #e2effb;
+      border-radius: 18px;
+      padding: 18px;
+      margin-top: 16px;
+      border-left: 6px solid #0f3b5e;
+    }
+
+    .calc-result p {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1rem;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .calc-result .total {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #0c2d48;
+      border-top: 2px dashed #b2cde2;
+      padding-top: 12px;
+      margin-top: 10px;
+    }
+
+    .zmw-highlight {
+      color: #0f3b5e;
+      font-weight: 700;
+    }
+
+    /* BUTTONS */
+    .btn {
+      background: #0f3b5e;
+      color: white;
+      border: none;
+      padding: 16px 22px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border-radius: 40px;
+      width: 100%;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      display: inline-block;
+      text-align: center;
+      letter-spacing: 0.3px;
+      box-shadow: 0 4px 10px rgba(15,59,94,0.2);
+    }
+
+    .btn:active {
+      background: #0a2a42;
+      transform: scale(0.98);
+    }
+
+    .btn-outline {
+      background: white;
+      color: #0f3b5e;
+      border: 2px solid #0f3b5e;
+      box-shadow: none;
+    }
+
+    .btn-outline:active {
+      background: #e6f0fa;
+    }
+
+    /* DEMO NOTICE */
+    .demo-notice {
+      background: #fff3cd;
+      border-left: 6px solid #b91c1c;
+      padding: 16px;
+      border-radius: 14px;
+      font-size: 0.95rem;
+      color: #5a3e00;
+      margin: 8px 0 16px;
+      font-weight: 500;
+    }
+
+    .demo-notice strong {
+      color: #b91c1c;
+    }
+
+    /* FOOTER */
+    .footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #5e7c9a;
+      margin-top: 28px;
+      padding-top: 16px;
+      border-top: 1px solid #cdddec;
+    }
+
+    /* UTILITY */
+    .mt-2 { margin-top: 8px; }
+    .mt-3 { margin-top: 16px; }
+    .mb-1 { margin-bottom: 6px; }
+    .text-muted { color: #4a6f8e; font-size: 0.9rem; }
+    .text-small { font-size: 0.8rem; }
+    .fw-bold { font-weight: 700; }
+
+    /* RESPONSIVE TWEAKS FOR ANDROID */
+    @media (max-width: 420px) {
+      .logo { font-size: 1.6rem; }
+      .demo-banner { font-size: 0.8rem; padding: 8px; }
+      .card { padding: 16px 14px; }
+      .loan-amount { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- DEMO BANNER (fixed at top of container) -->
+    <div class="demo-banner">
+      ⚠️ DEMO ONLY — This website does not provide real loans or transfer money. <span>Illustrative</span>
+    </div>
+
+    <!-- HEADER with country badge -->
+    <header class="app-header">
+      <div class="logo">
+        Echo Cash <small>DEMO</small>
+      </div>
+      <div class="country-badge">
+        🇿🇲 Zambia · ZMW
+      </div>
+    </header>
+
+    <!-- MAIN CARD: Loan Products (Zambian Kwacha) -->
+    <section class="card">
+      <h2>Sample loan products <i>ZMW</i></h2>
+      <div class="loan-grid">
+        <div class="loan-item">
+          <div class="loan-amount">K 2,000 <small>ZMW</small></div>
+          <div class="loan-detail">
+            <span>Repay over 3 months</span>
+            <span>Total: <strong>K 2,240</strong></span>
+          </div>
+          <div class="badge-term">3 × K 746.67</div>
+        </div>
+        <div class="loan-item">
+          <div class="loan-amount">K 5,000 <small>ZMW</small></div>
+          <div class="loan-detail">
+            <span>Repay over 6 months</span>
+            <span>Total: <strong>K 5,780</strong></span>
+          </div>
+          <div class="badge-term">6 × K 963.33</div>
+        </div>
+        <div class="loan-item">
+          <div class="loan-amount">K 10,000 <small>ZMW</small></div>
+          <div class="loan-detail">
+            <span>Repay over 12 months</span>
+            <span>Total: <strong>K 12,400</strong></span>
+          </div>
+          <div class="badge-term">12 × K 1,033.33</div>
+        </div>
+      </div>
+      <p class="text-muted mt-2" style="margin-top:14px;">Representative example only. Actual terms would vary.</p>
+    </section>
+
+    <!-- REPAYMENT CALCULATOR -->
+    <section class="card">
+      <h2>📊 Illustrative repayment calculator</h2>
+      <p class="text-muted mb-1">Adjust amount and term to see estimated monthly repayment (ZMW).</p>
+      <div class="row mt-2">
+        <div>
+          <label for="calcAmount">Loan amount (K)</label>
+          <input type="number" id="calcAmount" value="5000" min="500" max="50000" step="500" inputmode="numeric">
+        </div>
+        <div>
+          <label for="calcTerm">Term (months)</label>
+          <select id="calcTerm">
+            <option value="3">3 months</option>
+            <option value="6" selected>6 months</option>
+            <option value="12">12 months</option>
+            <option value="18">18 months</option>
+          </select>
+        </div>
+      </div>
+      <div class="calc-result" id="calcResult">
+        <!-- populated by JS -->
+      </div>
+      <p class="text-small text-muted mt-2">Illustrative interest: 12% flat per annum. Not a real offer.</p>
+    </section>
+
+    <!-- DEMO APPLICATION FORM -->
+    <section class="card">
+      <h2>📝 Demonstration application</h2>
+      <p class="text-muted mb-1">This is a non-functional demo form — do not enter real information.</p>
+
+      <div class="demo-notice">
+        <strong>🔒 Demo only:</strong> We never collect or store real financial credentials. All fields are for illustration.
+      </div>
+
+      <form id="demoForm" onsubmit="event.preventDefault(); alert('DEMO ONLY — no application was submitted. This form does not collect real data.');">
+        <div class="row">
+          <div>
+            <label for="fullName">Full name</label>
+            <input type="text" id="fullName" placeholder="e.g. Mwansa Banda" autocomplete="off">
+          </div>
+        </div>
+
+        <div class="row mt-2">
+          <div>
+            <label for="phone">Phone number (Zambia +260)</label>
+            <div class="input-phone-group">
+              <select id="countryCode" aria-label="Country code">
+                <option value="+260" selected>🇿🇲 +260 (Zambia)</option>
+                <option value="+1">🇺🇸 +1</option>
+                <option value="+44">🇬🇧 +44</option>
+                <option value="+27">🇿🇦 +27</option>
+              </select>
+              <input type="tel" id="phone" placeholder="97 123 4567" inputmode="tel" autocomplete="off">
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-2">
+          <div>
+            <label for="loanAmountInput">Desired amount (K)</label>
+            <input type="number" id="loanAmountInput" value="5000" min="500" max="50000" step="500" inputmode="numeric">
+          </div>
+          <div>
+            <label for="loanPurpose">Purpose</label>
+            <select id="loanPurpose">
+              <option>School fees</option>
+              <option>Business stock</option>
+              <option>Home improvement</option>
+              <option>Emergency</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mt-3">
+          <button type="submit" class="btn">Submit demo application (no real action)</button>
+        </div>
+        <p class="text-small text-muted mt-2" style="text-align:center;">By clicking, you acknowledge this is a simulation.</p>
+      </form>
+    </section>
+
+    <!-- DISCLAIMERS AND NON-AFFILIATION -->
+    <div class="demo-notice" style="background:#f0f4f9; border-left-color:#0f3b5e; color:#1e3a5f;">
+      <strong>⛔ No affiliation:</strong> This demo is not affiliated with Echo Cash or any real lender. All loan products, rates, and calculations are fictional and for illustration only. No money is transferred or lent.
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      Echo Cash Demo · Zambia (ZMW) · Mobile-friendly demonstration <br>
+      © 2025 — For illustrative purposes only.
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // --- CURRENCY: Zambian Kwacha (ZMW / K) ---
+      const CURRENCY_SYMBOL = 'K';
+      const CURRENCY_CODE = 'ZMW';
+
+      // Helper: format Zambian Kwacha
+      function formatZMW(amount) {
+        return CURRENCY_SYMBOL + ' ' + amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      }
+
+      // --- CALCULATOR LOGIC ---
+      const calcAmount = document.getElementById('calcAmount');
+      const calcTerm = document.getElementById('calcTerm');
+      const calcResultDiv = document.getElementById('calcResult');
+
+      function updateCalculator() {
+        let principal = parseFloat(calcAmount.value) || 0;
+        let months = parseInt(calcTerm.value, 10) || 3;
+
+        // Guard: ensure principal is positive, cap at 50k, min 500
+        if (principal < 500) principal = 500;
+        if (principal > 50000) principal = 50000;
+        calcAmount.value = principal;
+
+        // Simple illustrative flat interest: 12% per annum
+        const annualRate = 0.12;
+        const interest = principal * annualRate * (months / 12);
+        const totalRepay = principal + interest;
+        const monthly = totalRepay / months;
+
+        // Build result HTML
+        calcResultDiv.innerHTML = `
+          <p><span>Loan amount</span> <span class="zmw-highlight">${formatZMW(principal)}</span></p>
+          <p><span>Term</span> <span>${months} months</span></p>
+          <p><span>Illustrative interest (12% p.a.)</span> <span>${formatZMW(interest)}</span></p>
+          <p><span>Total repayment</span> <span>${formatZMW(totalRepay)}</span></p>
+          <div class="total"><span>Monthly instalment</span> <span>${formatZMW(monthly)}</span></div>
+        `;
+      }
+
+      // Attach events
+      calcAmount.addEventListener('input', updateCalculator);
+      calcTerm.addEventListener('change', updateCalculator);
+
+      // Initialize calculator on load
+      updateCalculator();
+
+      // --- UPDATE LOAN PRODUCTS DYNAMICALLY? (No, we keep hardcoded ZMW as per spec) ---
+      // But we ensure loan amounts displayed are in ZMW already in HTML.
+      // Optionally, we could reformat them with K, but they are fine.
+
+      // --- DEMO FORM: Simple alert (already in onsubmit) but also intercept to show custom message ---
+      const demoForm = document.getElementById('demoForm');
+      demoForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('DEMO ONLY — This website does not provide real loans or transfer money. No data was sent.');
+      });
+
+      // --- SET DEFAULT COUNTRY: Zambia (+260) ---
+      // The country code selector already has Zambia as selected value.
+      // Also ensure Zambia is default in any other settings.
+      // We can also prefill phone placeholder for Zambia.
+
+      // --- DISPLAY CONFIRMATION: No real financial credentials collected ---
+      // Already shown in form notice.
+
+      // Optional: reflect ZMW in the desired amount field (form)
+      // The form already shows K, we can add placeholder formatting? Not needed.
+
+      // Ensure all amounts in loan cards are consistent (they are hardcoded ZMW).
+
+      // Add a small touch: if user changes calcAmount, also update form loan amount? Not necessary.
+      // But we can keep them in sync for convenience? Not required. Keeping separate is fine.
+
+      // --- MOBILE FRIENDLY ---
+      // Already via viewport and responsive CSS.
+
+      // Extra: dynamically show the selected country code in the phone input? Not needed.
+      // But we can add a note.
+
+      // Ensure that the country code selector uses +260 as default
+      const countrySelect = document.getElementById('countryCode');
+      if (countrySelect) {
+        countrySelect.value = '+260'; // force default
+      }
+
+      // Also set the default country in any hidden settings? Not present, but we
+      // can add a meta or data attribute. It's fine.
+
+      // Add a small dynamic hint for phone number format (Zambia)
+      const phoneInput = document.getElementById('phone');
+      if (phoneInput) {
+        phoneInput.placeholder = '97 123 4567 (Zambia)';
+      }
+
+      // Currency consistency: all amounts use ZMW/K. Already done.
+      // Loan products are static but reflect ZMW.
+
+      // Set the document's lang to en-ZM? Not necessary but nice.
+      document.documentElement.lang = 'en-ZM';
+
+      // Display demo notice also in console (optional)
+      console.log('Echo Cash Demo — Zambia (ZMW). DEMO ONLY — no real loans or money transfers.');
+    })();
+  </script>
+  <!-- Ensure the page is fully self-contained, no external dependencies -->
+</body>
+</html>
